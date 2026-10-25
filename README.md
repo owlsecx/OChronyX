@@ -18,23 +18,18 @@
 
 ## 📌 Overview
 
-Offline time-sync (chrony/ntpd/timesyncd/OpenNTPD) configuration auditor
+OChronyX is an offline, read-only auditor for time-synchronization configuration, covering chrony, ntpd/ntpsec, systemd-timesyncd and OpenNTPD. It parses each daemon's configuration (including includes and drop-ins) and checks for amplification exposure, spoofing/time-skew risks, control-plane exposure and weak authentication, with every secret masked. Findings map to CWE and MITRE ATT&CK with a score, grade and hardened templates.
 
 ---
 
 ## ✨ Features
 
-- Offline, read-only parsers for chrony.conf (with include / confdir / sourcedir), ntp.conf (ntpd and ntpsec), timesyncd.conf (+ drop-ins) and OpenNTPD
-- Amplification checks — open allow 0/0, mode 7, monitor / MRU list, missing ratelimit (T1498)
-- Spoofing / time-skew checks — unauthenticated sources, broadcast / multicast clients, DHCP NTP, huge step / root distance limits (T1557, Kerberos)
-- Control-plane checks — cmdallow, bindcmdaddress, cmdport, Autokey crypto, disable auth, trustedkey
-- Key-file permission + weak digest checks, with every secret masked in all output
-- Forensic logging checks — logchange, log measurements/statistics/tracking, noclientlog
-- systemd unit / drop-in privilege review
-- CWE + MITRE ATT&CK mapping, severity, remediation
-- Score + grade, hardened templates, self-test demo
-- Export TXT / MD / JSON / CSV / SARIF 2.1.0
-- Full CLI mode (--chrony, --ntp, --root, --scan …)
+- Offline parsers for chrony.conf, ntp.conf, timesyncd.conf and OpenNTPD
+- Amplification checks: open allow 0/0, mode 7, monitor/MRU, missing ratelimit (T1498)
+- Spoofing/time-skew checks: unauthenticated sources, broadcast clients, step limits (T1557)
+- Control-plane checks: cmdallow, bindcmdaddress, Autokey, trustedkey
+- Key-file permission and weak-digest checks with secrets masked
+- CWE + MITRE ATT&CK mapping, hardened templates and export TXT/MD/JSON/CSV/SARIF
 
 ---
 
@@ -48,7 +43,10 @@ Offline time-sync (chrony/ntpd/timesyncd/OpenNTPD) configuration auditor
 ## 🚀 Usage
 
 ```bash
-./OChronyX
+./OChronyX --scan
+./OChronyX --chrony /etc/chrony/chrony.conf --format json -o report.json --fail-on high
+./OChronyX --root /mnt/image --scan
+./OChronyX --help
 ```
 
 ---
